@@ -21,28 +21,28 @@ function createWindow() {
 app.on('ready', createWindow);
 
 // insert a document
-ipcMain.on('save-user-request', (event, arg) => {
-  let user = {
-    name: arg.name,
-    age: arg.age
+ipcMain.on('save-user-request', (event, user) => {
+  let newUser = {
+    name: user.name,
+    age: user.age
   };
-  db.insert(user, (err, newDoc) => {
+  db.insert(newUser, (err, newDoc) => {
     if(err)
-      event.sender.send('save-user-response', `An error occurred\n${err}`);
+      event.sender.send('save-user-error', `An error occurred\n${err}`);
     else 
-      event.sender.send('save-user-response', `User inserted: ${newDoc._id}`); 
+      event.sender.send('save-user-success', newDoc); 
   });
 });
 
 // find documents by field name
-ipcMain.on('find-users-request', (event, arg) => {
-  arg = new RegExp(arg);
-  let query = {name: arg};
+ipcMain.on('find-users-request', (event, searchedName) => {
+  searchedName = new RegExp(searchedName);
+  let query = {name: searchedName};
   db.find(query, (err, docs) => {
     if(err)
-      event.sender.send('find-users-response', `An error occurred\n${err}`);
+      event.sender.send('find-users-error', `An error occurred\n${err}`);
     else 
-      event.sender.send('find-users-response', docs);
+      event.sender.send('find-users-success', docs);
   });
 });
 

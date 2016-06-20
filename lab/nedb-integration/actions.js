@@ -10,8 +10,13 @@ btnSaveUser.addEventListener('click', () => {
   ipcRenderer.send('save-user-request', user);
 });
 
-ipcRenderer.on('save-user-response', (event, arg) => {
-  alert(arg);
+// get the response from the main process
+ipcRenderer.on('save-user-error', (event, err) => {
+  alert(err);
+});
+
+ipcRenderer.on('save-user-success', (event, doc) => {
+  alert(`User inserted: ${doc._id}`);
 });
 
 // find documents by field name
@@ -22,14 +27,18 @@ btnFindUsers.addEventListener('click', () => {
   ipcRenderer.send('find-users-request', searchedName);
 });
 
-ipcRenderer.on('find-users-response', (event, arg) => {
-  // handle errors must come here
+// get the response from the main process
+ipcRenderer.on('find-users-error', (event, err) => {
+  alert(err);
+});
+
+ipcRenderer.on('find-users-success', (event, docs) => {
   let divResp = document.getElementById('found-docs');
   divResp.textContent = '';
-  if(arg.length) {
-    arg.forEach(function(value) {
+  if(docs.length) {
+    docs.forEach(function(doc) {
       let p = document.createElement('p');
-      p.textContent = JSON.stringify(value);
+      p.textContent = JSON.stringify(doc);
       divResp.appendChild(p);
     });
   }
