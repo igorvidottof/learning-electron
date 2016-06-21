@@ -1,4 +1,5 @@
 const {ipcRenderer} = require('electron');
+let divResp = document.getElementById('found-docs');
 
 // insert a document
 let btnSaveUser = document.getElementById('save-user');
@@ -33,13 +34,36 @@ ipcRenderer.on('find-users-error', (event, err) => {
 });
 
 ipcRenderer.on('find-users-success', (event, docs) => {
-  let divResp = document.getElementById('found-docs');
   divResp.textContent = '';
   if(docs.length) {
     docs.forEach(function(doc) {
+      let divDoc = document.createElement('div');
+
+      // insert a doc in an individual div
       let p = document.createElement('p');
       p.textContent = JSON.stringify(doc);
-      divResp.appendChild(p);
+      divDoc.appendChild(p);
+
+      // create buttons
+      let btnUpdate = document.createElement('button');
+      btnUpdate.textContent = 'Update';
+      btnUpdate.setAttribute('class', 'update-user');
+      // verify the best way to do this
+      /*btnUpdate.addEventListener('click', () => {
+        let divDoc = btnUpdate.parentNode;
+        console.log(divDoc.firstChild.textContent);
+      });*/
+
+      let btnDelete = document.createElement('button');
+      btnDelete.textContent = 'Delete';
+      btnDelete.setAttribute('class', 'delete-user');
+
+      // add buttons in the view
+      divDoc.appendChild(btnUpdate);
+      divDoc.appendChild(btnDelete);
+
+      // insert doc and buttons in the view
+      divResp.appendChild(divDoc);
     });
   }
   else {
