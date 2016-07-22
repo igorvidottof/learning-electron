@@ -6,6 +6,26 @@
   </head>
   <body>
     <h1>Electron/momentjs integration</h1>
-    <button>Compare Dates</button>
+    <button id="compare-dates">Compare Dates</button>
+
+    <script>
+      const moment = require('moment');
+
+      let btnCompareDates = document.getElementById('compare-dates');
+
+      // test
+      btnCompareDates.addEventListener('click', function() {
+        for (var i = 0; i < 10000; i++) {
+          let now = {time: moment()};
+          let currDate = moment();
+
+          console.log(now['time'].isSame(currDate, 'day'));
+
+          if (now['time'].isSame(currDate, 'day')) {
+            console.log('it worked!');
+          }
+        }
+      })
+    </script>
   </body>
 </html>
