@@ -14,17 +14,23 @@
       let btnCompareDates = document.getElementById('compare-dates');
 
       // test
+      console.time('Performance test');
       btnCompareDates.addEventListener('click', function() {
-        for (var i = 0; i < 10000; i++) {
+        console.log('Comparing...');
+        let isSameDate = [];
+        for (var i = 0; i < 100000; i++) {
           let now = {time: moment()};
           let currDate = moment();
 
-          console.log(now['time'].isSame(currDate, 'day'));
+          // console.log(now['time'].isSame(currDate, 'day'));
 
           if (now['time'].isSame(currDate, 'day')) {
-            console.log('it worked!');
+            // console.log('it worked!');
+            isSameDate.push(currDate);
           }
         }
+        console.log(`Task completed: ${isSameDate.length} matches`);
+        console.timeEnd('Performance test');
       })
     </script>
   </body>
