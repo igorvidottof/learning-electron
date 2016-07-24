@@ -9,15 +9,18 @@
     <button id="compare-dates">Compare Dates</button>
 
     <script>
+      const electron = require('electron');
+      const {ipcRenderer} = electron;
       const moment = require('moment');
 
       let btnCompareDates = document.getElementById('compare-dates');
 
       // test
-      console.time('Performance test');
-      btnCompareDates.addEventListener('click', function() {
+      btnCompareDates.addEventListener('click', () => {
+        ipcRenderer.send('compare-dates');
         console.log('Comparing...');
         let isSameDate = [];
+        console.time('Performance test');
         for (var i = 0; i < 100000; i++) {
           let now = {time: moment()};
           let currDate = moment();

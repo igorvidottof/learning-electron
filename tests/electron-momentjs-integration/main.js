@@ -3,6 +3,8 @@ const electron = require('electron');
 const {app} = electron;
 // Module to create native browser window.
 const {BrowserWindow} = electron;
+const {ipcMain} = electron;
+const moment = require('moment');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -31,6 +33,25 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
+
+ipcMain.on('compare-dates', (event, args) => {
+  console.log('Comparing...');
+  let isSameDate = [];
+  console.time('Performance test');
+  for (var i = 0; i < 100000; i++) {
+    let now = {time: moment()};
+    let currDate = moment();
+
+    // console.log(now['time'].isSame(currDate, 'day'));
+
+    if (now['time'].isSame(currDate, 'day')) {
+      // console.log('it worked!');
+      isSameDate.push(currDate);
+    }
+  }
+  console.log(`Task completed: ${isSameDate.length} matches`);
+  console.timeEnd('Performance test');
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
